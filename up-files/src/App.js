@@ -4,7 +4,8 @@ import axios from 'axios';
 
 class App extends React.Component {
   state = {
-    lo: false
+    lo: false,
+    co:10
   }
   constructor(props) {
     super(props);
@@ -17,27 +18,36 @@ class App extends React.Component {
   handleInputChange(e) {
     this.setState({
       file: e.target.files[0],
+      
     });
   }
 
   handleInputSubmit(e) {
+    this.setState({
+      co:this.state.co+1
+
+    })
     e.preventDefault()
     let data = new FormData();
+    const ur = 'http://localhost:8080/api/files/upFile'+ this.state.co;
     data.append('file', this.state.file);
 
-    axios.post('http://localhost:8080/api/files/'+this.props.nameImage, data)
+    axios.post(ur, data)
       .then(function (response) {
         console.log("file uploaded!", response);
-        
+        alert("file uploaded!")
+        window.location.reload()
       })
       .catch(function (error) {
         console.log("failed file upload", error);
       });
+
   }
-
- 
-
+  
+  
+  
   render() {
+    const uri = 'http://localhost:8080/api/files/upFile'+ this.state.co;
     
     return (
       <div>
@@ -51,7 +61,7 @@ class App extends React.Component {
           Mostrar Imagen
         </button> */}
 
-        <img src="http://localhost:8080/api/files/file" />
+        <img src={uri} />
       </div>
 
 
